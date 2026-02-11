@@ -244,15 +244,15 @@ Invalid domains are:
 
 ## Input Table
 
-![Input Table](./screenshots/input_table.png)
+![Input Table](./table1.png)
 
 ## Output Table
 
-![Output Table](./screenshots/output_table.png)
+![Output Table](./table2.png)
 
 ## Error Log Table
 
-![Error Log](./screenshots/error_log_table.png)
+![Error Log](./table3.png)
 
 ---
 
