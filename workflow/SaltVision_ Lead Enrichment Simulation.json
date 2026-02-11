@@ -1,0 +1,813 @@
+{
+  "name": "SaltVision: Lead Enrichment Simulation",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        688
+      ],
+      "id": "c8c4d4e1-26a6-4b8c-a224-59e17080202c",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "9qm9nHzKUNy99Lf6",
+          "mode": "list",
+          "cachedResultName": "input_companies",
+          "cachedResultUrl": "/projects/F1fwucsvjIGULW3e/datatables/9qm9nHzKUNy99Lf6"
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        688
+      ],
+      "id": "ed5687d5-83db-42ef-a27f-93981986645e",
+      "name": "Read Input Leads2"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.status }}",
+                    "rightValue": "Generated",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "a94df9ae-2304-43bd-acab-04a5b49d2d03"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Valid"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "f7164975-2183-4f88-ab26-d28cf19361c2",
+                    "leftValue": "={{ $json.status }}",
+                    "rightValue": "Duplicate",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Duplicate"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "452e22b8-a672-406e-a29f-0bd6657911fd",
+                    "leftValue": "={{ $json.status }}",
+                    "rightValue": "Skipped (Invalid Website)",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Invalid Website"
+            }
+          ]
+        },
+        "looseTypeValidation": true,
+        "options": {
+          "allMatchingOutputs": true
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        416,
+        672
+      ],
+      "id": "28cd86c6-979b-4121-9073-c8c31aaed090",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "LgMwgn6WhqmPB1co",
+          "mode": "list",
+          "cachedResultName": "output_leads",
+          "cachedResultUrl": "/projects/F1fwucsvjIGULW3e/datatables/LgMwgn6WhqmPB1co"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "company": "={{ $json.company }}",
+            "website": "={{ $json.domain }}",
+            "industry": "={{ $json.industry }}",
+            "country": "={{ $json.country }}",
+            "processing_status": "={{ $json.status }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "company",
+              "displayName": "company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "website",
+              "displayName": "website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "industry",
+              "displayName": "industry",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "country",
+              "displayName": "country",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "generated_email",
+              "displayName": "generated_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "confidence_level",
+              "displayName": "confidence_level",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "email_subject",
+              "displayName": "email_subject",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "email_body",
+              "displayName": "email_body",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "processing_status",
+              "displayName": "processing_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        720,
+        688
+      ],
+      "id": "fdcc0b21-ea41-445a-b199-92dcef9f7277",
+      "name": "Add Duplicate Entry"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "LgMwgn6WhqmPB1co",
+          "mode": "list",
+          "cachedResultName": "output_leads",
+          "cachedResultUrl": "/projects/F1fwucsvjIGULW3e/datatables/LgMwgn6WhqmPB1co"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "website",
+              "keyValue": "={{ $json.domain }}"
+            },
+            {
+              "keyName": "processing_status",
+              "keyValue": "Generated"
+            }
+          ]
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        720,
+        496
+      ],
+      "id": "9fe98b8d-c94e-4630-a162-b66954716c82",
+      "name": "Read Existing Output",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get items\nconst allItems = $('Switch').all();\nconst foundItems = $input.all();\n\n// Normalize Company Names from found items (string → string)\nconst foundNames = new Set(\n  foundItems\n    .map(item => item.json.company_name)\n    .filter(cn => !!cn)\n    .map(cn => String(cn))\n);\n\n// Filter allItems by removing found Codes\nconst result = allItems.filter(item => {\n  const compName = item.json.company;\n  if (compName == null) return true; // keep items without Code\n  return !foundNames.has(String(compName));\n});\n\n// Return remaining items (n8n format preserved)\nreturn result;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        944,
+        496
+      ],
+      "id": "0a6feaea-ae5c-488e-9163-c67ea5939e9c",
+      "name": "Filter Existing Items"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// Get company data\nconst companyData = $input.item.json;\n\n// const company = companyData?.company;\nconst domain = companyData?.originalWebsite;\nconst industry = companyData?.industry;\nconst country = companyData.country;\n\n// Email generation logic based on industry\nlet generatedEmail = '';\nlet confidence = '';\nlet reason = '';\n\n// Define industry categories\nconst b2bIndustries = ['Furniture', 'Manufacturing', 'Wholesale', 'Industrial', 'B2B'];\nconst serviceIndustries = ['Interior Design', 'Consulting', 'Services', 'Agency', 'Design'];\nconst techIndustries = ['Tech', 'Software', 'SaaS', 'Technology', 'IT'];\nconst retailIndustries = ['Retail', 'E-commerce', 'Consumer', 'Shopping'];\n\n// Determine best email pattern based on industry\nif (b2bIndustries.some(ind => industry.includes(ind))) {\n  generatedEmail = `sales@${domain}`;\n  confidence = 'High';\n  reason = `${industry} businesses typically use sales@ for B2B inquiries and lead generation`;\n  \n} else if (serviceIndustries.some(ind => industry.includes(ind))) {\n  generatedEmail = `info@${domain}`;\n  confidence = 'Medium';\n  reason = `${industry} companies often use info@ for general inquiries and service requests`;\n  \n} else if (techIndustries.some(ind => industry.includes(ind))) {\n  generatedEmail = `contact@${domain}`;\n  confidence = 'Medium';\n  reason = `${industry} companies commonly use contact@ for business communications`;\n  \n} else if (retailIndustries.some(ind => industry.includes(ind))) {\n  generatedEmail = `support@${domain}`;\n  confidence = 'Low';\n  reason = `${industry} businesses may use support@ or customer service emails`;\n  \n} else {\n  // Default fallback\n  generatedEmail = `info@${domain}`;\n  confidence = 'Low';\n  reason = `Using generic info@ as fallback for ${industry} industry`;\n}\n\n// Return enriched data\nreturn {\n  json: {\n    ...companyData,\n    generatedEmail: generatedEmail,\n    confidenceLevel: confidence,\n    emailReason: reason\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1152,
+        496
+      ],
+      "id": "a4e16f75-ec84-4cdc-9ec1-13fe0bb28fab",
+      "name": "Generate Email Hypotheses"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// Get company data\nconst companyData = $input.item.json;\n\nconst company =companyData?.company;\nconst industry =companyData?.industry;\nconst country =companyData?.country;\nconst domain =companyData?.domain;\nconst generatedEmail =companyData?.generatedEmail;\n\n// Generate subject line based on industry\nlet subject = '';\nif (industry.includes('Furniture')) {\n  subject = `Transform Your Furniture Business with Digital Solutions`;\n} else if (industry.includes('Interior Design') || industry.includes('Design')) {\n  subject = `Innovative Tools for ${industry} Professionals`;\n} else if (industry.includes('Tech') || industry.includes('Software')) {\n  subject = `Scale Your ${industry} Operations`;\n} else {\n  subject = `Growth Solutions for ${industry} Companies`;\n}\n\n// Generate personalized email body\nconst emailBody = `Dear ${company} Team,\n\nI hope this message finds you well.\n\nI came across ${company} while researching leading ${industry} companies in ${country}, and I was impressed by your work in the industry.\n\nWe specialize in helping ${industry} businesses like yours achieve their growth objectives through:\n\n- Process automation and efficiency improvements\n- Digital transformation strategies\n- Customer engagement enhancement\n- Data-driven decision making\n\nMany ${industry} companies we work with have seen measurable improvements in operational efficiency and customer satisfaction within the first quarter.\n\nGiven ${company}'s position in the ${country} market, I believe there could be valuable synergies worth exploring.\n\nWould you be open to a brief 15-minute call to discuss how we might support your goals?\n\nBest regards,\nBusiness Development Team\n\n---\nNote: This is a simulated outreach email\nGenerated for: ${generatedEmail}\nConfidence Level: ${companyData.confidenceLevel}\nDomain: ${domain}`;\n// Confidence Level: ${$json.confidenceLevel}\n\n// Return with email content\nreturn {\n  json: {\n    ...companyData,\n    emailSubject: subject,\n    emailBody: emailBody\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1360,
+        496
+      ],
+      "id": "41b65752-f0c4-4236-b704-1fc8c34e1e7a",
+      "name": "Generate Outreach Email Content"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "LgMwgn6WhqmPB1co",
+          "mode": "list",
+          "cachedResultName": "output_leads",
+          "cachedResultUrl": "/projects/F1fwucsvjIGULW3e/datatables/LgMwgn6WhqmPB1co"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "company": "={{ $json.company }}",
+            "website": "={{ $json.domain }}",
+            "industry": "={{ $json.industry }}",
+            "country": "={{ $json.country }}",
+            "processing_status": "={{ $json.status }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "company",
+              "displayName": "company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "website",
+              "displayName": "website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "industry",
+              "displayName": "industry",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "country",
+              "displayName": "country",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "generated_email",
+              "displayName": "generated_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "confidence_level",
+              "displayName": "confidence_level",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "email_subject",
+              "displayName": "email_subject",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "email_body",
+              "displayName": "email_body",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "processing_status",
+              "displayName": "processing_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        720,
+        880
+      ],
+      "id": "3dfbe08b-04c5-45df-930a-9f3db2c94f87",
+      "name": "Add Invalid Entry"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Validate, Normalize, and Flag Duplicates\n\nconst items = $input.all();\nconst seenKeys = new Set();\nconst results = [];\n\nfor (const item of items) {\n  let rawName = item.json['company_name'] || '';\n  let rawWebsite = item.json['website'] || '';\n  let status = \"Generated\";\n  let domain = \"\";\n\n  // 1. Normalize Name\n  const normalizedName = rawName.trim().replace(/\\s+/g, ' ').toLowerCase();\n\n  // 2. Validate Website\n  try {\n    // if (!rawWebsite) throw new Error();\n    // let urlStr = rawWebsite.startsWith('http') ? rawWebsite : `https://${rawWebsite}`;\n    // const urlObj = urlStr;\n    // domain = urlObj.replace('www.', '');\n    // if (!domain.includes('.')) throw new Error();\n\n    if (!rawWebsite) throw new Error(\"Empty website\");\n\n    // Remove protocol + www\n    let cleaned = rawWebsite\n      .replace(/^https?:\\/\\//i, '')\n      .replace(/^www\\./i, '')\n      .trim()\n      .toLowerCase();\n\n    // Remove path and trailing slash\n    cleaned = cleaned.split('/')[0];\n\n    domain = cleaned;\n\n    // Strict domain regex\n    const domainRegex = /^(?!-)(?!.*\\.\\.)([a-z0-9-]+\\.)+[a-z]{2,}$/;\n\n    if (!domainRegex.test(domain)) {\n      throw new Error(\"Invalid domain format\");\n    }\n  } catch (e) {\n    status = \"Skipped (Invalid Website)\";\n  }\n\n  // 3. Deduplication Check (on domain or name)\n  const dedupKey = domain || normalizedName;\n  // const dedupKey = rawName || rawWebsite;\n  \n  if (seenKeys.has(dedupKey)) {\n    status = \"Duplicate\";\n  }\n  seenKeys.add(dedupKey);\n\n  results.push({\n    json: {\n      company: rawName.trim(),\n      domain: domain,\n      industry: item.json['industry'],\n      country: item.json['country'],\n      originalWebsite: rawWebsite,\n      status: status,\n      timestamp: new Date().toISOString()\n    }\n  });\n}\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        688
+      ],
+      "id": "dbf6d81c-6d11-4a89-8863-819ac90d3bb6",
+      "name": "Validate & Normalize"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "Jhg4uIP7fZdyLP3N",
+          "mode": "list",
+          "cachedResultName": "error_log",
+          "cachedResultUrl": "/projects/F1fwucsvjIGULW3e/datatables/Jhg4uIP7fZdyLP3N"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "workflow": "={{ $workflow.name }}",
+            "node": "=Switch: Invalid Website",
+            "error_message": "The Website URL is not correct",
+            "input_data": "={{ $json.originalWebsite }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "workflow",
+              "displayName": "workflow",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "node",
+              "displayName": "node",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "error_message",
+              "displayName": "error_message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "input_data",
+              "displayName": "input_data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        720,
+        1056
+      ],
+      "id": "e41ae6df-9b78-410c-b590-ad2112abcb4b",
+      "name": "Log Error"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "LgMwgn6WhqmPB1co",
+          "mode": "list",
+          "cachedResultName": "output_leads",
+          "cachedResultUrl": "/projects/F1fwucsvjIGULW3e/datatables/LgMwgn6WhqmPB1co"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "website",
+              "keyValue": "={{ $json.domain }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "company": "={{ $json.company }}",
+            "website": "={{ $json.domain }}",
+            "industry": "={{ $json.industry }}",
+            "country": "={{ $json.country }}",
+            "email_subject": "={{ $json.emailSubject }}",
+            "generated_email": "={{ $json.emailReason }}",
+            "confidence_level": "={{ $json.confidenceLevel }}",
+            "email_body": "={{ $json.emailBody }}",
+            "processing_status": "={{ $json.status }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "company",
+              "displayName": "company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "website",
+              "displayName": "website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "industry",
+              "displayName": "industry",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "country",
+              "displayName": "country",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "generated_email",
+              "displayName": "generated_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "confidence_level",
+              "displayName": "confidence_level",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "email_subject",
+              "displayName": "email_subject",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "email_body",
+              "displayName": "email_body",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "processing_status",
+              "displayName": "processing_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1568,
+        496
+      ],
+      "id": "e7cafe07-8d0b-4584-a9d7-0b01f5509c88",
+      "name": "Update Valid Entry"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Read Input Leads2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Input Leads2": {
+      "main": [
+        [
+          {
+            "node": "Validate & Normalize",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Read Existing Output",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Add Duplicate Entry",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Add Invalid Entry",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Log Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Duplicate Entry": {
+      "main": [
+        []
+      ]
+    },
+    "Read Existing Output": {
+      "main": [
+        [
+          {
+            "node": "Filter Existing Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Existing Items": {
+      "main": [
+        [
+          {
+            "node": "Generate Email Hypotheses",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Email Hypotheses": {
+      "main": [
+        [
+          {
+            "node": "Generate Outreach Email Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Outreach Email Content": {
+      "main": [
+        [
+          {
+            "node": "Update Valid Entry",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate & Normalize": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Valid Entry": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "eefa3575-5921-4602-ad32-ddf9c0e09c09",
+  "meta": {
+    "instanceId": "8baeb39a3b0b53ee1a7acb1ec40b2199ad1ceea7c7e99105ff2937c420e93851"
+  },
+  "id": "9y56CaLNVaPBbz4l",
+  "tags": []
+}
