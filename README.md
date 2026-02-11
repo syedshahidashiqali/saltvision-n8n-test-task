@@ -19,6 +19,12 @@ Instead of Google Sheets, I used **n8n Data Tables** to simulate a CRM system wi
 
 ---
 
+## Workflow Screenshot:
+
+![Workflow Screenshot](./screenshots/workflow.png)
+
+---
+
 # 🏗️ Workflow Architecture
 
 ## High-Level Flow
